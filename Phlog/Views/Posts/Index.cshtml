@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Phlog.Models.Post>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+
+<div class="row" data-masonry='{"percentPosition": true }'>
+    @foreach (var post in Model) {
+
+        <div class="col-sm-6 col-lg-4 mb-4">
+          <div class="card">
+            <a asp-action="Delete" asp-route-id="@post.Id">
+                    <img src="~/uploads/@post.ImageFileName" class="bd-placeholder-img card-img" />
+            </a>
+          </div>
+        </div>
+
+    }
+ </div>
