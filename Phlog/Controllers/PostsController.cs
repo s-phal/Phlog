@@ -77,7 +77,7 @@ namespace Phlog.Controllers
         [Route("admin/")]
         public async Task<IActionResult> Create()
         {
-            var posts = await _context.Post.ToListAsync();
+            var posts = await _context.Post.OrderByDescending(p => p.Id).ToListAsync();
 
             return View(posts);
         }
@@ -187,7 +187,7 @@ namespace Phlog.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Redirect("~/admin");
         }
 
         private bool PostExists(int id)
