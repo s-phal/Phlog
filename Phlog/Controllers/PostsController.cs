@@ -25,6 +25,12 @@ namespace Phlog.Controllers
             _imageService = imageService;
         }
 
+        [Route("contactme")]
+        public IActionResult ContactMe()
+        {
+            return View();
+        }
+
         // GET: Posts
         public async Task<IActionResult> Index(string? s)
         {
@@ -68,11 +74,12 @@ namespace Phlog.Controllers
             return View(post);
         }
 
-        [Authorize]
-        [Route("admin/posts/create")]
-        public IActionResult Create()
+        [Route("admin/")]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var posts = await _context.Post.ToListAsync();
+
+            return View(posts);
         }
 
         // POST: Posts/Create
