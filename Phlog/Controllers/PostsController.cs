@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Phlog.Data;
 using Phlog.Models;
 using Phlog.Services;
+
+// todo return to top
 
 namespace Phlog.Controllers
 {
@@ -23,11 +26,28 @@ namespace Phlog.Controllers
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? s)
         {
-              return _context.Post != null ? 
-                          View(await _context.Post.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Post'  is null.");
+            if(s == "cosplay")
+            {
+                var post = await _context.Post
+                    .Where(p => p.Category == s)
+                    .ToListAsync();
+
+                return View(post);
+            }
+            if (s == "portrait")
+            {
+                var post = await _context.Post
+                    .Where(p => p.Category == s)
+                    .ToListAsync();
+
+                return View(post);
+            }
+
+
+            return View(await _context.Post.ToListAsync());
+
         }
 
         // GET: Posts/Details/5
@@ -48,7 +68,8 @@ namespace Phlog.Controllers
             return View(post);
         }
 
-        // GET: Posts/Create
+        [Authorize]
+        [Route("admin/posts/create")]
         public IActionResult Create()
         {
             return View();

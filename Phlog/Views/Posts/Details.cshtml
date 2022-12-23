@@ -4,39 +4,22 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="text-center mb-4 nav-menu opacity-75">
+    <a href="/" class="text-decoration-none text-uppercase text-white ">all</a>
+    <a href="~/?s=portrait" class="text-decoration-none text-uppercase text-white mx-5">portrait</a>
+    <a href="~/?s=cosplay" class="text-decoration-none text-uppercase text-white">cosplay</a>
+</div>
 
-<div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-    </dl>
+
+<div class="card mb-3 mt-5 text-white bg-transparent border-0">
+  <img src="~/uploads/@Model.ImageFileName" class="card-img-top" alt="@Model.Id">
+  <div class="card-body">
+        <h5 class="card-title">Brie</h5>
+    <p class="card-text opacity-75">I forgot who initiated the first contact but it was a pleasure working with Brie.</p>
+    <p class="card-text"><small class="text-muted">@Model.CreatedDate</small></p>
+  </div>
+    <div class="card-footer text-muted">proteinprincess</div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+
