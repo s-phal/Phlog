@@ -18,11 +18,13 @@ namespace Phlog.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ImageService _imageService;
+        private readonly TagService _tagService;
 
-        public PostsController(ApplicationDbContext context, ImageService imageService)
+        public PostsController(ApplicationDbContext context, ImageService imageService, TagService tagService)
         {
             _context = context;
             _imageService = imageService;
+            _tagService = tagService;
         }
 
         [Route("contactme")]
@@ -99,12 +101,19 @@ namespace Phlog.Controllers
                 _context.Add(post);
                 await _context.SaveChangesAsync();
 
-                Tag newTag = new Tag()
+                var tagValues = _tagService.SplitTags(tag.Name);
+
+                foreach (var aTag in tagValues)
                 {
-                    Name = tag.Name,
-                    PostId = post.Id
-                };
-                _context.Add(newTag);
+                    Tag newTag = new Tag()
+                    {
+                        Name = aTag,
+                        PostId = post.Id
+                    };
+                    _context.Add(newTag);
+
+                }
+
                 await _context.SaveChangesAsync();
                 return Redirect("~/admin");
             }

@@ -19,6 +19,7 @@ namespace Phlog
 
             // Custom services - SP
             builder.Services.AddTransient<ImageService>();
+            builder.Services.AddTransient<TagService>();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
