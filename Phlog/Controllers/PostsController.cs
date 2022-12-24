@@ -34,20 +34,39 @@ namespace Phlog.Controllers
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index(string? s)
+        public async Task<IActionResult> Index(string? s, string? cat, string? modelname, string? tag)
         {
-            if(s == "cosplay")
+            if(cat == "cosplay")
             {
                 var post = await _context.Post
-                    .Where(p => p.Category == s)
+                    .Where(p => p.Category == cat)
                     .ToListAsync();
 
                 return View(post);
             }
-            if (s == "portrait")
+            if (cat == "portrait")
             {
                 var post = await _context.Post
-                    .Where(p => p.Category == s)
+                    .Where(p => p.Category == cat)
+                    .ToListAsync();
+
+                return View(post);
+            }
+            
+            if(modelname != null)
+            {
+                var post = await _context.Post
+                    .Where(p => p.ModelName.ToLower() == modelname.ToLower())
+                    .ToListAsync();
+                
+                
+               return View(post);
+            }
+
+            if(tag != null)
+            {
+                var post = await _context.Post
+                    .Where(p => p.Tags.Any(t => t.Name.Contains(tag)))
                     .ToListAsync();
 
                 return View(post);
