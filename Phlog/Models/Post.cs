@@ -6,9 +6,8 @@ namespace Phlog.Models
     {
         public int Id { get; set; }
         public string Category { get; set; } = "portrait";
-        public string? InstagramUsername { get; set; }
-        public string? ModelName { get; set; }
-        public string? Tag { get; set; }
+        public string InstagramUsername { get; set; } = "unknown";
+        public string ModelName { get; set; } = "unknown";
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }

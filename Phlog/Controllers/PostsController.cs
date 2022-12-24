@@ -77,7 +77,9 @@ namespace Phlog.Controllers
         [Route("admin/")]
         public async Task<IActionResult> Create()
         {
-            var posts = await _context.Post.OrderByDescending(p => p.Id).ToListAsync();
+            var posts = await _context.Post
+                .OrderByDescending(p => p.Id)
+                .ToListAsync();
 
             return View(posts);
         }
@@ -87,18 +89,26 @@ namespace Phlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,Category,CreatedDate")] Post post, IFormFile ImageFile)
+        [Route("posts/create")]
+        public async Task<IActionResult> Create([Bind("Id,Category,ImageFile,ModelName,InstagramUsername")] Post post, Tag tag)
         {
             if (ModelState.IsValid)
-            {
-                post.ImageFileName = _imageService.CreateUniqueFileName(ImageFile);
-
-                _imageService.UploadImageFile(ImageFile, post.ImageFileName);
-             
+            {                
+                post.ImageFileName = _imageService.CreateUniqueFileName(post.ImageFile);
+                _imageService.UploadImageFile(post.ImageFile, post.ImageFileName);
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                Tag newTag = new Tag()
+                {
+                    Name = tag.Name,
+                    PostId = post.Id
+                };
+                _context.Add(newTag);
+                await _context.SaveChangesAsync();
+                return Redirect("~/admin");
             }
+
             return View(post);
         }
 

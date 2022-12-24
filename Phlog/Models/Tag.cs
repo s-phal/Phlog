@@ -1,4 +1,6 @@
-﻿namespace Phlog.Models
+﻿using Microsoft.EntityFrameworkCore.Storage;
+
+namespace Phlog.Models
 {
     public class Tag
     {
@@ -7,5 +9,6 @@
 
         public int PostId { get; set; }
         public virtual Post? Post { get; set; }
+
     }
 }

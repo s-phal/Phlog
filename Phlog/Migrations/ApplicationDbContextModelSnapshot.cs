@@ -241,12 +241,11 @@ namespace Phlog.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("InstagramUsername")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ModelName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Tag")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
