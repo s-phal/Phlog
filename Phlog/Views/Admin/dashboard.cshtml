@@ -3,6 +3,10 @@
 @model IEnumerable<Phlog.Models.Post>
 @inject ApplicationDbContext _context;
 
+@{
+    var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
+}
+
 <div class="container pb-3 mt-5">
     <div class="d-flex">
         <section class="col-3 me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -31,7 +35,7 @@
 							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-badge me-2" viewBox="0 0 16 16">
 								<path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
 								<path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z" />
-							</svg>Photographer Profile
+							</svg>Owner Profile
                         </button>
                     </li>
                     <li class="list-group-item">
@@ -46,6 +50,8 @@
         </section>
 
         <div class="tab-content col">
+            
+            <partial name ="_DisplayMessage" />
 
             <!-- Posts Tab Start -->
             <div id="tab-posts" class="tab-pane list-group active show">
@@ -127,99 +133,65 @@
             </div>
             <!-- Posts Tab End -->
 
-			<!-- Photographer Profile START -->
-            <div id="tab-userprofile" class="tab-pane">
+			<!-- Owner Profile START -->
+            <div id="tab-photographerprofile" class="tab-pane col-sm-12 col-lg-4">
 				<div class="card shadow">
 
 					<!-- Card header -->
 					<div class="card-header border-bottom">
-						<h5 class="card-header-title">Website Settings</h5>
+						<h5 class="card-header-title">Owner Profile</h5>
 					</div>
 
 					<!-- Card body START -->
 					<div class="card-body">
-						<form class="row g-4 align-items-center">
+						<form class="row g-3 align-items-center">
+                           
+                            <img src="~/uploads/default.png" class="mx-auto rounded-circle" style="width: 150px; height: 150px"/>
+
+                            <div class="w-100">
+                                <input type="file" name="ImageFile" class="form-control"/>                            
+                            </div>
+
 
 							<!-- Input item -->
-							<div class="col-lg-4">
-								<label class="form-label">Site Name</label>
-								<input type="text" class="form-control" placeholder="Site Name">
-								<div class="form-text">Enter Website Name. It Display in Website and Email.</div>
+							<div class="w-50">
+								<input type="text" class="form-control" placeholder="First Name">
 							</div>
 
 							<!-- Input item -->
-							<div class="col-lg-4">
-								<label class="form-label">Site Copyrights</label>
-								<input type="text" class="form-control" placeholder="Site Copyrights">
-								<div class="form-text">Using for Contact and Send Email</div>
-							</div>
-
-							<!-- Input item -->
-							<div class="col-lg-4">
-								<label class="form-label">Site Email</label>
-								<input type="email" class="form-control" placeholder="Site Email">
-								<div class="form-text">For Copyrights Text</div>
+							<div class="w-50">
+								<input type="email" class="form-control" placeholder="Last Name">
 							</div>
 
 							<!-- Textarea item -->
-							<div class="col-12">
-								<label class="form-label">Site Description</label>
-								<textarea class="form-control" rows="3"></textarea>
-								<div class="form-text">For write brief description of your organization, or a Website.</div>
+							<div class="w-100">
+								<textarea class="form-control" rows="3" placeholder="About Me"></textarea>
 							</div>
 
 							<!-- Input item -->
-							<div class="col-lg-6">
-								<label class="form-label">Contact Phone</label>
-								<input type="text" class="form-control" placeholder="Contact Phone">
-								<div class="form-text">Using for Contact and Support</div>
+							<div class="w-100">
+								<input type="text" class="form-control" placeholder="Phone Number">
 							</div>
 
-							<!-- Input item -->
-							<div class="col-lg-6">
-								<label class="form-label">Support Email</label>
-								<input type="email" class="form-control" placeholder="Support Email">
-								<div class="form-text">For Support Email</div>
-							</div>
+                            <!-- Input item -->
+                            <div class="w-100">
+                                <input type="email" class="form-control" placeholder="Instagram">
+                            </div>
 
-							<!-- Radio items -->
-							<div class="col-lg-6">
-								<label class="form-label">Allow Registration</label>
-								<div class="d-sm-flex">
-									<!-- Radio -->
-									<div class="form-check radio-bg-light me-4">
-										<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked="">
-										<label class="form-check-label" for="flexRadioDefault1">
-											Enable
-										</label>
-									</div>
-									<!-- Radio -->
-									<div class="form-check radio-bg-light me-4">
-										<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-										<label class="form-check-label" for="flexRadioDefault2">
-											Disable
-										</label>
-									</div>
-									<!-- Radio -->
-									<div class="form-check radio-bg-light">
-										<input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-										<label class="form-check-label" for="flexRadioDefault3">
-											On Request
-										</label>
-									</div>
-								</div>
-							</div>
+                            <!-- Input item -->
+                            <div class="w-100">
+                                <input type="email" class="form-control" placeholder="Facebook">
+                            </div>
 
-							<!-- Textarea item -->
-							<div class="col-12">
-								<label class="form-label">Contact Address</label>
-								<textarea class="form-control" rows="3"></textarea>
-								<div class="form-text">Enter support Address</div>
-							</div>
+                            <!-- Input item -->
+                            <div class="w-100">
+                                <input type="email" class="form-control" placeholder="Twitter">
+                            </div>
+
 
 							<!-- Save button -->
 							<div class="d-sm-flex justify-content-end">
-								<button type="button" class="btn btn-primary mb-0">Update</button>
+								<button type="button" class="btn btn-info mb-0 text-white">Update</button>
 							</div>
 						</form>
 					</div>
@@ -230,7 +202,7 @@
 			<!-- Photographer Profile END -->
 
             <!-- Site Settings START -->
-            <div id="tab-sitesettings" class="tab-pane">
+            <div id="tab-sitesettings" class="tab-pane col-sm-12 col-lg-5">
 				<div class="card shadow">
 
 					<!-- Card header -->
@@ -243,13 +215,13 @@
                         <form asp-action="UpdateSiteSettings" asp-controller="Admin">
 
 							<!-- Input item -->
-							<div class="col-lg-4 mb-3">
-								<input type="text" name="SiteName" class="form-control" placeholder="Site Name">
+							<div class="mb-3 w-100">
+								<input type="text" name="SiteName" class="form-control" placeholder="Site Name" value="@siteSettings.SiteName" />
 							</div>
 
 							<!-- Textarea item -->
-							<div class="col-12 mb-3">
-								<textarea class="form-control" name="SiteDescription" rows="3" placeholder="Site Description - Used for Search Engine Optimization."></textarea>
+							<div class="mb-3 w-100">
+								<textarea class="form-control" name="SiteDescription" rows="3" placeholder="Site Description - Used for Search Engine Optimization.">@siteSettings.SiteDescription</textarea>
 							</div>
 
 							<!-- Save button -->

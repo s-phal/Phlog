@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Phlog.Data;
 using Phlog.Models;
 
 namespace Phlog.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -37,6 +39,7 @@ namespace Phlog.Controllers
                 _context.Add(siteSettings);
                 await _context.SaveChangesAsync();
 
+                TempData["DisplayMessage"] = "Settings Updated.";
                 return Redirect("~/admin");
             }
 
@@ -48,6 +51,7 @@ namespace Phlog.Controllers
                 _context.Update(getRow);
                 await _context.SaveChangesAsync();
 
+                TempData["DisplayMessage"] = "Settings Updated.";
                 return Redirect("~/admin");
 
             }

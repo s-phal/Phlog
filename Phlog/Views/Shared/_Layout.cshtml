@@ -1,9 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.EntityFrameworkCore;
+@using Phlog.Data;
+@inject ApplicationDbContext _context;
+<!DOCTYPE html>
 <html lang="en">
 <head>
+    @{
+        var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
+    }
+    <!-- Site Settings -->
+    <title>@siteSettings.SiteName</title>
+    <meta name="description" content="@siteSettings.SiteDescription">
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sam Phal Portraits</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Phlog.styles.css" asp-append-version="true" />

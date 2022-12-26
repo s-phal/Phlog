@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Phlog.Data;
+using Phlog.Models;
 using Phlog.Services;
 
 namespace Phlog
@@ -20,9 +21,11 @@ namespace Phlog
             // Custom services - SP
             builder.Services.AddTransient<ImageService>();
             builder.Services.AddTransient<TagService>();
+            builder.Services.AddRazorPages(); 
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddIdentity<SiteOwner, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

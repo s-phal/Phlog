@@ -4,7 +4,7 @@ using Phlog.Models;
 
 namespace Phlog.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<SiteOwner>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
