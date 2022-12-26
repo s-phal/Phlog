@@ -11,6 +11,9 @@
 
     // get instance of current signed in user
     var user = await _userManager.GetUserAsync(User);
+
+    // get category context
+    var categoryList = await _context.Category.ToListAsync();
 }
 
 <div class="container pb-3 mt-5">
@@ -58,6 +61,49 @@
         <div class="tab-content col">
             
             <partial name ="_DisplayMessage" />
+
+            <!-- Categories START -->
+            <div id="tab-categories" class="tab-pane col-sm-12 col-lg-4">
+                <div class="card shadow">
+
+                    <!-- Card header -->
+                    <div class="card-header border-bottom">
+                        <h5 class="card-header-title">Categories</h5>
+                    </div>
+
+                    <!-- Card body START -->
+                    <div class="card-body">
+                        <form asp-action="CreateCategory" asp-controller="Admin">
+                            <div class=" row g-3 align-items-center">
+
+                                <!-- Input item-->
+                                <div class="w-100">
+                                    <input type="text" name="Name" class="form-control" placeholder="Enter Category Name">
+                                </div>
+
+                                <!-- Save button -->
+                                <div>
+                                    <button type="submit" class="btn btn-info mb-0 text-white w-100">Create Category</button>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="list-group mt-3">
+                            @{
+                                foreach (var category in categoryList)
+                                {
+                                    <a href="#" class="list-group-item list-group-item-action">@category.Name</a>
+                                    
+                                }
+                                
+                            }
+
+                        </div>
+                    </div>
+                    <!-- Card body END -->
+
+                </div>
+            </div>
+            <!-- Categories END -->
 
             <!-- Posts Tab Start -->
             <div id="tab-posts" class="tab-pane list-group active show">

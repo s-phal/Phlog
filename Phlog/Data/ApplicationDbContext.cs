@@ -10,6 +10,7 @@ namespace Phlog.Data
             : base(options)
         {
         }
+        public DbSet<Phlog.Models.Category> Category { get; set; } = default!;
         public DbSet<Phlog.Models.Post> Post { get; set; } = default!;
         public DbSet<Phlog.Models.Tag> Tag { get; set; } = default!;
         public DbSet<Phlog.Models.SiteSettings> SiteSettings { get; set; } = default!;

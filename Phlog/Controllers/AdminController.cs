@@ -35,6 +35,15 @@ namespace Phlog.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> CreateCategory(Category category)
+        {
+            _context.Add(category);
+            await _context.SaveChangesAsync();
+            TempData["DisplayMessage"] = "Category created successfully.";
+            return Redirect("~/admin");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UpdateOwnerProfile(SiteOwner siteOwner)
         {
             var user = await _userManager.GetUserAsync(User);
