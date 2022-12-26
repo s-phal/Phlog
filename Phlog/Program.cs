@@ -16,6 +16,8 @@ namespace Phlog
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
+
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             // Custom services - SP
@@ -24,6 +26,8 @@ namespace Phlog
             builder.Services.AddRazorPages(); 
 
             builder.Services.AddIdentity<SiteOwner, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddDefaultUI() // Add 
+                .AddDefaultTokenProviders() // Add
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddControllersWithViews();

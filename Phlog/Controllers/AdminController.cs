@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 using Phlog.Data;
 using Phlog.Models;
+using Phlog.Services;
 
 namespace Phlog.Controllers
 {
@@ -10,10 +13,14 @@ namespace Phlog.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<SiteOwner> _userManager;
+        private readonly ImageService _imageService;
 
-        public AdminController(ApplicationDbContext context) 
+        public AdminController(ApplicationDbContext context, UserManager<SiteOwner> userManager, ImageService imageService) 
         {
             _context = context;
+            _userManager = userManager;
+            _imageService = imageService;
         }
 
 
@@ -25,6 +32,46 @@ namespace Phlog.Controllers
                 .ToListAsync();
 
             return View(posts);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOwnerProfile(SiteOwner siteOwner)
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            user.FirstName = siteOwner.FirstName;
+            user.LastName = siteOwner.LastName;
+            user.AboutMe = siteOwner.AboutMe;
+            user.PhoneNumber = siteOwner.PhoneNumber;
+            user.InstagramId = siteOwner.InstagramId;
+            user.FaceBookId = siteOwner.FaceBookId;
+            user.TwitterId = siteOwner.TwitterId;
+
+            if (siteOwner.AvatarImageFile == null)
+            {
+                await _userManager.UpdateAsync(user);
+                await _context.SaveChangesAsync();
+
+                TempData["DisplayMessage"] = "Profile Updated.";
+                return Redirect("~/admin");
+            }
+
+            // check file integrity 
+            if (!siteOwner.AvatarImageFile.ContentType.Contains("image"))
+            {
+                TempData["DisplayMessage"] = "Error - Picture file type not accepted.";
+                return Redirect("~/admin");
+            }
+
+            user.AvatarFileName = _imageService.CreateUniqueFileName(siteOwner.AvatarImageFile);
+            _imageService.UploadImageFile(siteOwner.AvatarImageFile, user.AvatarFileName);
+
+            
+            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync();
+
+            TempData["DisplayMessage"] = "Profile Updated.";
+            return Redirect("~/admin");
         }
 
         [HttpPost]

@@ -1,10 +1,16 @@
-﻿@using Microsoft.EntityFrameworkCore;
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore;
 @using Phlog.Data;
 @model IEnumerable<Phlog.Models.Post>
 @inject ApplicationDbContext _context;
+@inject UserManager<SiteOwner> _userManager;
 
 @{
+    // get first row from SiteSettings table
     var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
+
+    // get instance of current signed in user
+    var user = await _userManager.GetUserAsync(User);
 }
 
 <div class="container pb-3 mt-5">
@@ -143,56 +149,59 @@
 					</div>
 
 					<!-- Card body START -->
-					<div class="card-body">
-						<form class="row g-3 align-items-center">
+                    <div class="card-body">
+						<form asp-action="UpdateOwnerProfile" asp-controller="Admin" enctype="multipart/form-data">
+                            <div class=" row g-3 align-items-center">
                            
-                            <img src="~/uploads/default.png" class="mx-auto rounded-circle" style="width: 150px; height: 150px"/>
+                            <img src="~/uploads/@user.AvatarFileName" class="mx-auto " style="width: 150px; height: 150px"/>
 
+                            <!-- Profile Picture -->
                             <div class="w-100">
-                                <input type="file" name="ImageFile" class="form-control"/>                            
+                                <input type="file" name="AvatarImageFile" class="form-control"/>                            
                             </div>
 
 
-							<!-- Input item -->
+							<!-- First Name -->
 							<div class="w-50">
-								<input type="text" class="form-control" placeholder="First Name">
+                                <input type="text" name="FirstName" value="@user.FirstName" class="form-control" placeholder="First Name" />
 							</div>
 
-							<!-- Input item -->
+							<!-- Last Name -->
 							<div class="w-50">
-								<input type="email" class="form-control" placeholder="Last Name">
+								<input type="text" name="LastName" value="@user.LastName" class="form-control" placeholder="Last Name" />
 							</div>
 
-							<!-- Textarea item -->
+							<!-- About Me -->
 							<div class="w-100">
-								<textarea class="form-control" rows="3" placeholder="About Me"></textarea>
+								<textarea name="AboutMe" class="form-control" rows="7" placeholder="About Me">@user.AboutMe</textarea>
 							</div>
 
-							<!-- Input item -->
+							<!-- Phone Number  -->
 							<div class="w-100">
-								<input type="text" class="form-control" placeholder="Phone Number">
+                                    <input type="text" name="PhoneNumber" value="@user.PhoneNumber" class="form-control" placeholder="Phone Number" />
 							</div>
 
-                            <!-- Input item -->
+                            <!-- Instagram -->
                             <div class="w-100">
-                                <input type="email" class="form-control" placeholder="Instagram">
+                                    <input type="text" name="InstagramId" value="@user.InstagramId" class="form-control" placeholder="Instagram" />
                             </div>
 
-                            <!-- Input item -->
+                            <!-- Facebook -->
                             <div class="w-100">
-                                <input type="email" class="form-control" placeholder="Facebook">
+                                <input type="text" name="FacebookId" value="@user.FaceBookId" class="form-control" placeholder="Facebook" />
                             </div>
 
-                            <!-- Input item -->
+                            <!-- Twitter-->
                             <div class="w-100">
-                                <input type="email" class="form-control" placeholder="Twitter">
+                                <input type="text" name="TwitterId" value="@user.TwitterId" class="form-control" placeholder="Twitter">
                             </div>
 
 
 							<!-- Save button -->
 							<div class="d-sm-flex justify-content-end">
-								<button type="button" class="btn btn-info mb-0 text-white">Update</button>
+								<button type="submit" class="btn btn-info mb-0 text-white">Update</button>
 							</div>
+                            </div>
 						</form>
 					</div>
 					<!-- Card body END -->
