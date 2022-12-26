@@ -95,15 +95,8 @@ namespace Phlog.Controllers
             return View(post);
         }
 
-        [Route("admin/")]
-        public async Task<IActionResult> Admin()
-        {
-            var posts = await _context.Post
-                .OrderByDescending(p => p.Id)
-                .ToListAsync();
 
-            return View(posts);
-        }
+
 
         // POST: Posts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

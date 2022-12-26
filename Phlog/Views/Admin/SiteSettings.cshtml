@@ -1,0 +1,76 @@
+﻿@using Microsoft.EntityFrameworkCore;
+@using Phlog.Data;
+@model IEnumerable<Phlog.Models.Post>
+@inject ApplicationDbContext _context;
+
+<div class="container pb-3 mt-5">
+    <div class="d-flex">
+        <partial name="_AdminPanel" />
+        <section id="site-settings">
+			<div class="col">
+				<!-- Site Settings content START -->
+				<div class="tab-pane active show" id="tab-1" role="tabpanel">
+					<div class="card ">
+
+						<!-- Card header -->
+						<div class="card-header border-bottom">
+							<h5 class="card-header-title">Site Settings</h5>
+						</div>
+
+						<!-- Card body START -->
+						<div class="card-body">
+							<form class="row g-4 align-items-center">
+
+								<!-- Input item -->
+								<div class="col-lg-4">
+									<input type="text" class="form-control" placeholder="Site Name">
+								</div>
+
+								<!-- Input item -->
+								<div class="col-lg-4">
+									<input type="text" class="form-control" placeholder="Site Copyrights">
+								</div>
+
+								<!-- Input item -->
+								<div class="col-lg-4">
+									<input type="email" class="form-control" placeholder="Site Email">
+								</div>
+
+								<!-- Textarea item -->
+								<div class="col-12">
+									<textarea class="form-control" rows="3" placeholder="Site Description"></textarea>
+								</div>
+
+								<!-- Input item -->
+								<div class="col-lg-6">
+									<input type="text" class="form-control" placeholder="Contact Phone Number">
+								</div>
+
+								<!-- Input item -->
+								<div class="col-lg-6">
+									<input type="email" class="form-control" placeholder="Contact Email Address">
+								</div>
+
+								<!-- Save button -->
+								<div class="d-sm-flex justify-content-end">
+									<button type="button" class="btn btn-info mb-0 text-white ">Update</button>
+								</div>
+							</form>
+						</div>
+						<!-- Card body END -->
+
+					</div>
+				</div>
+				<!-- Site Settings content END -->
+			</div>
+        </section>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
