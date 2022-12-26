@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Phlog.Migrations
 {
     /// <inheritdoc />
-    public partial class _001InitCreate : Migration
+    public partial class _001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -52,7 +52,7 @@ namespace Phlog.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tag",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -61,7 +61,7 @@ namespace Phlog.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,20 +176,39 @@ namespace Phlog.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Category = table.Column<string>(type: "text", nullable: false),
                     InstagramUsername = table.Column<string>(type: "text", nullable: false),
                     ModelName = table.Column<string>(type: "text", nullable: false),
                     ImageFileName = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    TagId = table.Column<int>(type: "integer", nullable: false)
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Post", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Post_Tag_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tag",
+                        name: "FK_Post_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tag",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    PostId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tag", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tag_Post_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Post",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -232,9 +251,14 @@ namespace Phlog.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Post_TagId",
+                name: "IX_Post_CategoryId",
                 table: "Post",
-                column: "TagId");
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tag_PostId",
+                table: "Tag",
+                column: "PostId");
         }
 
         /// <inheritdoc />
@@ -256,7 +280,7 @@ namespace Phlog.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Post");
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -265,7 +289,10 @@ namespace Phlog.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "Post");
+
+            migrationBuilder.DropTable(
+                name: "Category");
         }
     }
 }

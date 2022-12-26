@@ -12,8 +12,8 @@ using Phlog.Data;
 namespace Phlog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221224144224_001-InitCreate")]
-    partial class _001InitCreate
+    [Migration("20221225191538_001")]
+    partial class _001
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,6 +225,23 @@ namespace Phlog.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Phlog.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("Phlog.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -233,9 +250,8 @@ namespace Phlog.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -251,12 +267,9 @@ namespace Phlog.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("TagId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Post");
                 });
@@ -273,7 +286,12 @@ namespace Phlog.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("PostId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("PostId");
 
                     b.ToTable("Tag");
                 });
@@ -331,18 +349,34 @@ namespace Phlog.Migrations
 
             modelBuilder.Entity("Phlog.Models.Post", b =>
                 {
-                    b.HasOne("Phlog.Models.Tag", "Tag")
+                    b.HasOne("Phlog.Models.Category", "Category")
                         .WithMany("Posts")
-                        .HasForeignKey("TagId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Tag");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Phlog.Models.Tag", b =>
                 {
+                    b.HasOne("Phlog.Models.Post", "Post")
+                        .WithMany("Tags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("Phlog.Models.Category", b =>
+                {
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("Phlog.Models.Post", b =>
+                {
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

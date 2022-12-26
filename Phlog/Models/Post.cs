@@ -5,7 +5,6 @@ namespace Phlog.Models
     public class Post
     {
         public int Id { get; set; }
-        public string Category { get; set; } = "portrait";
         public string InstagramUsername { get; set; } = "unknown";
         public string ModelName { get; set; } = "unknown";
 
@@ -15,6 +14,10 @@ namespace Phlog.Models
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
+        public int CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
+
         public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
+
     }
 }

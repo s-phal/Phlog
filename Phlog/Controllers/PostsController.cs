@@ -39,7 +39,7 @@ namespace Phlog.Controllers
             if(cat == "cosplay")
             {
                 var post = await _context.Post
-                    .Where(p => p.Category == cat)
+                    //.Where(p => p.Category == cat)
                     .ToListAsync();
 
                 return View(post);
@@ -47,7 +47,7 @@ namespace Phlog.Controllers
             if (cat == "portrait")
             {
                 var post = await _context.Post
-                    .Where(p => p.Category == cat)
+                    //.Where(p => p.Category == cat)
                     .ToListAsync();
 
                 return View(post);
@@ -96,7 +96,7 @@ namespace Phlog.Controllers
         }
 
         [Route("admin/")]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Admin()
         {
             var posts = await _context.Post
                 .OrderByDescending(p => p.Id)

@@ -12,37 +12,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm mt-3">
-            <div class="container justify-content-center">
-                <a class="text-white text-decoration-none" style="font-size:75px; font-family: 'Allura', cursive; opacity: 1; letter-spacing:2px;" asp-controller="posts" asp-action="Index">Sam Phal</a>
-            </div>
-        </nav>
-    </header>
-    <div class="text-center mb-4 nav-menu opacity-75">
-        <a href="/" class="text-decoration-none text-uppercase text-white me-5">all</a>
-        <a href="~/?cat=portrait" class="text-decoration-none text-uppercase text-white me-5">portrait</a>
-        <a href="~/?cat=cosplay" class="text-decoration-none text-uppercase text-white me-5">cosplay</a>
-        <a href="~/contactme" class="text-decoration-none text-uppercase text-white">contact</a>
-    </div>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="text-secondary opacity-50">
-        <div class="container">
-            &copy; @DateTime.Now.Year.ToString() - Sam Phal
-        </div>
-    </footer>
+
+
+@RenderBody()
+
+
+<footer class="text-secondary opacity-50">
+    <div class="container">
+        &copy; @DateTime.Now.Year.ToString() - Sam Phal
+    </div>
+</footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/masonry.pkgd.min.js"></script>
 
-
-
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
