@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Phlog.Data;
+using Phlog.Models;
 
 namespace Phlog.Controllers
 {
@@ -24,10 +25,37 @@ namespace Phlog.Controllers
             return View(posts);
         }
 
-        [Route("admin/sitesettings")]
-        public async Task<IActionResult> SiteSettings()
+        [HttpPost]
+        public async Task<IActionResult> UpdateSiteSettings(SiteSettings siteSettings)
         {
-            return View();
+            var getRow = await _context.SiteSettings
+                .FirstOrDefaultAsync();
+
+            if (getRow == null) 
+            {
+
+                _context.Add(siteSettings);
+                await _context.SaveChangesAsync();
+
+                return Redirect("~/admin");
+            }
+
+            if (getRow != null )
+            {
+                getRow.SiteDescription = siteSettings.SiteDescription;
+                getRow.SiteName= siteSettings.SiteName;
+
+                _context.Update(getRow);
+                await _context.SaveChangesAsync();
+
+                return Redirect("~/admin");
+
+            }
+
+
+            return Redirect("~/admin");
+
         }
+
     }
 }

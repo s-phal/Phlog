@@ -12,5 +12,6 @@ namespace Phlog.Data
         }
         public DbSet<Phlog.Models.Post> Post { get; set; } = default!;
         public DbSet<Phlog.Models.Tag> Tag { get; set; } = default!;
-    }
+        public DbSet<Phlog.Models.SiteSettings> SiteSettings { get; set; } = default!;
+	}
 }
