@@ -34,13 +34,27 @@ namespace Phlog.Controllers
             return View(posts);
         }
 
+        [Route("admin/category")]
+        public async Task<IActionResult> Category()
+        {
+            var category = await _context.Category.ToListAsync();
+
+            return View(category);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateCategory(Category category)
         {
+            if(category.Name == null)
+            {
+                TempData["DisplayMessage"] = "Error - Category name can not be empty.";
+                return Redirect("~/admin/category");
+            }
+
             _context.Add(category);
             await _context.SaveChangesAsync();
             TempData["DisplayMessage"] = "Category created.";
-            return Redirect("~/admin");
+            return Redirect("~/admin/category");
         }
 
         [HttpPost]
@@ -55,7 +69,7 @@ namespace Phlog.Controllers
             await _context.SaveChangesAsync();
 
             TempData["DisplayMessage"] = "Category Updated.";
-            return Redirect("~/admin");
+            return Redirect("~/admin/category");
         }
 
         [HttpPost]
@@ -65,7 +79,7 @@ namespace Phlog.Controllers
             await _context.SaveChangesAsync();
 
             TempData["DisplayMessage"] = "Category deleted.";
-            return Redirect("~/admin");
+            return Redirect("~/admin/category");
         } 
 
         [HttpPost]
