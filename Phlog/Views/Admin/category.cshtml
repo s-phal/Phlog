@@ -1,9 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@using Microsoft.EntityFrameworkCore;
-@using Phlog.Data;
-@model IEnumerable<Phlog.Models.Category>
-@inject ApplicationDbContext _context;
-@inject UserManager<SiteOwner> _userManager;
+﻿@model IEnumerable<Phlog.Models.Category>
 
 
 
@@ -16,8 +11,8 @@
             <partial name="_DisplayMessage" />
 
             <!-- Categories START -->
-            <div class="col-sm-12 col-lg-4">
-                <div class="card shadow">
+            <div class="col-sm-12 col-lg-5">
+                <div class="card">
 
                     <!-- Card header -->
                     <div class="card-header border-bottom">

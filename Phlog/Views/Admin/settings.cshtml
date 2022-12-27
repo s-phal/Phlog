@@ -1,0 +1,53 @@
+﻿@model Phlog.Models.SiteSettings
+
+
+
+<div class="container pb-3 mt-5">
+    <div class="d-flex">
+        <partial name="_Dashboard" />
+
+        <div class="col">
+
+            <partial name="_DisplayMessage" />
+
+                        <!-- Site Settings START -->
+            <div class=" col-sm-12 col-lg-5">
+				<div class="card shadow">
+
+					<!-- Card header -->
+					<div class="card-header border-bottom">
+						<h5 class="card-header-title">Site Settings</h5>
+					</div>
+
+					<!-- Card body START -->
+                    <div class="card-body">
+                        <form asp-action="UpdateSiteSettings" asp-controller="Admin">
+
+							<!-- Input item -->
+							<div class="mb-3 w-100">
+								<input type="text" name="SiteName" class="form-control" placeholder="Site Name" value="@Model.SiteName" />
+							</div>
+
+							<!-- Textarea item -->
+							<div class="mb-3 w-100">
+								<textarea class="form-control" name="SiteDescription" rows="3" placeholder="Site Description - Used for Search Engine Optimization.">@Model.SiteDescription</textarea>
+							</div>
+
+							<!-- Save button -->
+							<div class="d-sm-flex justify-content-end">
+								<button type="submit" class="btn btn-info mb-0 text-white">Update</button>
+							</div>
+						</form>
+					</div>
+					<!-- Card body END -->
+
+				</div>
+			</div>
+			<!-- Site Settings END -->
+
+        </div>
+
+
+    </div>
+</div>
+

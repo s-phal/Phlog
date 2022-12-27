@@ -1,0 +1,89 @@
+﻿@model Phlog.Models.SiteOwner
+
+
+<div class="container pb-3 mt-5">
+    <div class="d-flex">
+        <partial name="_Dashboard" />
+
+        <div class="col">
+
+            <partial name="_DisplayMessage" />
+            <!-- Owner Profile START -->
+            <div class="col-sm-12 col-lg-5">
+                <div class="card shadow">
+
+                    <!-- Card header -->
+                    <div class="card-header border-bottom">
+                        <h5 class="card-header-title">Owner Profile</h5>
+                    </div>
+
+                    <!-- Card body START -->
+                    <div class="card-body">
+                        <form asp-action="UpdateOwnerProfile" asp-controller="Admin" enctype="multipart/form-data">
+                            <div class=" row g-3 align-items-center">
+
+                                <img src="~/uploads/@Model.AvatarFileName" class="mx-auto " style="width: 150px; height: 150px" />
+
+                                <!-- Profile Picture -->
+                                <div class="w-100">
+                                    <input type="file" name="AvatarImageFile" class="form-control" />
+                                </div>
+
+
+                                <!-- First Name -->
+                                <div class="w-50">
+                                    <input type="text" name="FirstName" value="@Model.FirstName" class="form-control" placeholder="First Name" />
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="w-50">
+                                    <input type="text" name="LastName" value="@Model.LastName" class="form-control" placeholder="Last Name" />
+                                </div>
+
+                                <!-- About Me -->
+                                <div class="w-100">
+                                    <textarea name="AboutMe" class="form-control" rows="7" placeholder="About Me">@Model.AboutMe</textarea>
+                                </div>
+
+                                <!-- Phone Number  -->
+                                <div class="w-100">
+                                    <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" class="form-control" placeholder="Phone Number" />
+                                </div>
+
+                                <!-- Instagram -->
+                                <div class="w-100">
+                                    <input type="text" name="InstagramId" value="@Model.InstagramId" class="form-control" placeholder="Instagram" />
+                                </div>
+
+                                <!-- Facebook -->
+                                <div class="w-100">
+                                    <input type="text" name="FacebookId" value="@Model.FaceBookId" class="form-control" placeholder="Facebook" />
+                                </div>
+
+                                <!-- Twitter-->
+                                <div class="w-100">
+                                    <input type="text" name="TwitterId" value="@Model.TwitterId" class="form-control" placeholder="Twitter">
+                                </div>
+
+
+                                <!-- Save button -->
+                                <div class="d-sm-flex justify-content-end">
+                                    <button type="submit" class="btn btn-info mb-0 text-white">Update</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Card body END -->
+
+                </div>
+            </div>
+            <!-- Photographer Profile END -->
+
+
+
+        </div>
+
+
+    </div>
+</div>
+
