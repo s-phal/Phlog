@@ -62,6 +62,63 @@ namespace Phlog.Controllers
             return Redirect("~/admin");
         }
 
+        public async Task<IActionResult> EditPost(Post post, Tag tag)
+        {
+            if (tag.Name != null)
+            {
+                var getDbTagValue = _context.Tag.Where(t => t.PostId == post.Id).AsEnumerable();
+
+                _context.RemoveRange(getDbTagValue);
+                await _context.SaveChangesAsync();
+
+                var tagValues = _tagService.SplitTags(tag.Name);
+
+                foreach (var aTag in tagValues)
+                {
+                    Tag newTag = new Tag()
+                    {
+                        Name = aTag,
+                        PostId = post.Id
+                    };
+                    _context.Add(newTag);
+                }
+            }
+
+            if (tag.Name == null) 
+            {
+                var getDbTagValue = _context.Tag.Where(t => t.PostId == post.Id).AsEnumerable();
+
+                _context.RemoveRange(getDbTagValue);
+                await _context.SaveChangesAsync();
+
+            }
+
+            if (post.ImageFile == null)
+            {
+                var getDbValue = await _context.Post
+                    .AsNoTracking()
+                    .Where(p => p.Id == post.Id)
+                    .FirstOrDefaultAsync();
+                post.ImageFileName = getDbValue.ImageFileName;
+
+                _context.Update(post);
+                await _context.SaveChangesAsync();
+                return Redirect("~/admin/post");
+            }
+
+            post.ImageFileName = _imageService.CreateUniqueFileName(post.ImageFile);
+            _imageService.UploadImageFile(post.ImageFile, post.ImageFileName);
+
+            _context.Update(post);
+
+            await _context.SaveChangesAsync();
+
+
+            TempData["DisplayMessage"] = "Post Updated.";
+            return Redirect("~/admin/post");
+
+        }
+
         [Route("admin/category")]
         public async Task<IActionResult> Category()
         {

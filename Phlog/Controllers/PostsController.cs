@@ -218,6 +218,8 @@ namespace Phlog.Controllers
             }
             
             await _context.SaveChangesAsync();
+
+            TempData["DisplayMessage"] = "Post deleted.";
             return Redirect("~/admin");
         }
 
