@@ -39,9 +39,34 @@ namespace Phlog.Controllers
         {
             _context.Add(category);
             await _context.SaveChangesAsync();
-            TempData["DisplayMessage"] = "Category created successfully.";
+            TempData["DisplayMessage"] = "Category created.";
             return Redirect("~/admin");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(Category category)
+        {
+            var getCategory = await _context.Category
+                .Where(c => c.Id == category.Id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            _context.Update(category);
+            await _context.SaveChangesAsync();
+
+            TempData["DisplayMessage"] = "Category Updated.";
+            return Redirect("~/admin");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(Category category)
+        {
+            _context.Remove(category);
+            await _context.SaveChangesAsync();
+
+            TempData["DisplayMessage"] = "Category deleted.";
+            return Redirect("~/admin");
+        } 
 
         [HttpPost]
         public async Task<IActionResult> UpdateOwnerProfile(SiteOwner siteOwner)

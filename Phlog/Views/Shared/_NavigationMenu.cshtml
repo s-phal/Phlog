@@ -1,8 +1,17 @@
-﻿
+﻿@using Microsoft.EntityFrameworkCore;
+@using Phlog.Data
+@inject ApplicationDbContext _context;
+@{
+    var categoryList = await _context.Category.ToListAsync();
+}
 <div class="text-center mb-4 nav-menu opacity-75">
-    <a href="/" class="text-decoration-none text-uppercase text-white me-5">all</a>
-
-
+    <a href="/" class="text-decoration-none text-uppercase text-white me-2">all</a>
+    @{
+        foreach (var category in categoryList)
+        {
+            <a href="~/?cat=@category.Name" class="text-decoration-none text-uppercase text-white me-2">@category.Name</a>
+        }
+    }
 
     <a href="~/contactme" class="text-decoration-none text-uppercase text-white">contact</a>
 </div>
