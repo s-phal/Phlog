@@ -3,11 +3,15 @@
 @using Phlog.Data;
 @inject ApplicationDbContext _context;
 
-@{        
+@{
     var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
 
     // get the URL of the current page
     string getUrl = Context.Request.GetDisplayUrl().ToLower();
+
+    string body = "<body>";
+    string bodyWhite = "<body style='background-color: white'>";
+
 }
 
 
@@ -28,11 +32,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
 </head>
-<body>
 
+@{
+    if (getUrl.Contains("account/manage"))
+    {
+        @Html.Raw(bodyWhite);
+    }
+    else
+    {
+        @Html.Raw(body);
+    }
+}
 
 
 @RenderBody()
+
 
     @if (!getUrl.Contains("identity/account"))
     {
@@ -54,5 +68,5 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 
-</body>
+</@body>
 </html>
