@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Phlog.Data;
 using Phlog.Models;
 using Phlog.Services;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
 namespace Phlog.Controllers
 {
@@ -37,23 +38,38 @@ namespace Phlog.Controllers
             return View("post", posts);
         }
 
+        [HttpPost]
         public async Task<IActionResult> CreatePost(Post post, Tag tag)
         {
+            if (post.ModelName == null) post.ModelName = "unknown";
+
+            if (post.InstagramUsername == null) post.InstagramUsername = "unknown";
+
+            if (post.CategoryId == 0)
+            {
+                TempData["DisplayMessage"] = "Error - Please choose a category.";
+                return Redirect("~/admin/post");
+            }
+
             post.ImageFileName = _imageService.CreateUniqueFileName(post.ImageFile);
             _imageService.UploadImageFile(post.ImageFile, post.ImageFileName);
             _context.Add(post);
             await _context.SaveChangesAsync();
 
-            var tagValues = _tagService.SplitTags(tag.Name);
-
-            foreach (var aTag in tagValues)
+            
+            if (tag.Name != null)
             {
-                Tag newTag = new Tag()
+                var tagValues = _tagService.SplitTags(tag.Name);
+
+                foreach (var aTag in tagValues)
                 {
-                    Name = aTag,
-                    PostId = post.Id
-                };
-                _context.Add(newTag);
+                    Tag newTag = new Tag()
+                    {
+                        Name = aTag,
+                        PostId = post.Id
+                    };
+                    _context.Add(newTag);
+                }
             }
 
             await _context.SaveChangesAsync();
@@ -62,6 +78,7 @@ namespace Phlog.Controllers
             return Redirect("~/admin");
         }
 
+        [HttpPost]
         public async Task<IActionResult> EditPost(Post post, Tag tag)
         {
             if (tag.Name != null)
@@ -116,6 +133,107 @@ namespace Phlog.Controllers
 
             TempData["DisplayMessage"] = "Post Updated.";
             return Redirect("~/admin/post");
+
+        }
+
+
+        [Route("~/admin/search/{wildcard?}")]
+        public async Task<IActionResult> Search(string? s, string? m, string? c, string? i, string? t)
+        {
+            // assign variables for easier reading
+            string searchTerm = s;
+            string modelName = m;
+            string categoryName = c;
+            string instagramName = i;
+            string tagName = t;
+
+            // if search input was provided
+            if (searchTerm != null)
+            {
+                // must exceed 3 characters to perform search
+                if (searchTerm.Length < 3)
+                {
+                    TempData["DisplayMessage"] = "Error - Search term must be at least 3 characters long.";
+                    return Redirect("~/admin/post");
+                }
+
+                // convert string for case sensitivity
+                searchTerm = searchTerm.ToLower();
+
+                // fetch all post that contains the searchTerm
+                // in the corresponding columns
+                var posts = await _context.Post
+                    .Where(p => p.Id.ToString().Contains(searchTerm) || 
+                    p.ModelName.ToLower().Contains(searchTerm) ||
+                    p.Category.Name.ToLower().Contains(searchTerm) ||
+                    p.InstagramUsername.ToLower().Contains(searchTerm) ||
+                    p.Tags.Any(t => t.Name.ToLower().Contains(searchTerm)))
+                    .ToListAsync();
+
+                return View("post", posts);
+            }
+
+            // filter by model name
+            if (modelName != null)
+            {
+                // convert string for case sensitivity
+                modelName = modelName.ToLower();
+
+                // fetch all post that contains model name
+                var posts = await _context.Post
+                    .Where(p => p.ModelName.ToLower() == modelName)
+                    .ToListAsync();
+
+                return View("post", posts);
+            }
+
+            // filter by category name
+            if (categoryName != null)
+            {
+                // convert string for case sensitivity
+                categoryName = categoryName.ToLower();
+
+                // fetch all post that contains category name
+                var posts = await _context.Post
+                    .Where(p => p.Category.Name.ToLower() == categoryName)
+                    .ToListAsync();
+
+                return View("post", posts);
+            }
+
+            // filter by instagram name
+            if (instagramName != null)
+            {
+                // convert string for case sensitivity
+                instagramName = instagramName.ToLower();
+
+                // fetch all post that contains the instagram name
+                var posts = await _context.Post
+                    .Where(p => p.InstagramUsername.ToLower() == instagramName)
+                    .ToListAsync();
+
+                return View("post", posts);
+            }
+
+            // filter by tag value
+            if (tagName != null)
+            {
+                // convert string for case sensitivity
+                tagName = tagName.ToLower();
+
+                // fetch all post that contains the tag value
+                var posts = await _context.Post
+                    .Where(p => p.Tags.Any(t => t.Name.ToLower().Contains(tagName)))
+                    .ToListAsync();
+
+                return View("post", posts);
+            }
+
+            // redirect if input is empty string
+            if (searchTerm == null) return Redirect("~/admin/post");
+
+            return Redirect("~/admin/");
+
 
         }
 
