@@ -1,12 +1,20 @@
-﻿@using Microsoft.EntityFrameworkCore;
+﻿@using Microsoft.AspNetCore.Http.Extensions;
+@using Microsoft.EntityFrameworkCore;
 @using Phlog.Data;
 @inject ApplicationDbContext _context;
+
+@{        
+    var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
+
+    // get the URL of the current page
+    string getUrl = Context.Request.GetDisplayUrl().ToLower();
+}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @{
-        var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
-    }
+
     <!-- Site Settings -->
     <title>@siteSettings.SiteName</title>
     <meta name="description" content="@siteSettings.SiteDescription">
@@ -26,12 +34,17 @@
 
 @RenderBody()
 
+    @if (!getUrl.Contains("identity/account"))
+    {
+        <footer class="text-secondary opacity-50">
+                <div class="container">
+                    &copy; @DateTime.Now.Year.ToString() - Sam Phal
+                </div>
+         </footer> 
+    }
 
-<footer class="text-secondary opacity-50">
-    <div class="container">
-        &copy; @DateTime.Now.Year.ToString() - Sam Phal
-    </div>
-</footer>
+
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
