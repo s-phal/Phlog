@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -19,18 +20,22 @@ namespace Phlog.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ImageService _imageService;
         private readonly TagService _tagService;
+        private readonly UserManager<SiteOwner> _userManager;
 
-        public PostsController(ApplicationDbContext context, ImageService imageService, TagService tagService)
+        public PostsController(ApplicationDbContext context, ImageService imageService, TagService tagService, UserManager<SiteOwner> userManager)
         {
             _context = context;
             _imageService = imageService;
             _tagService = tagService;
+            _userManager = userManager;
         }
 
         [Route("contactme")]
         public IActionResult ContactMe()
         {
-            return View();
+			var siteOwner = _userManager.Users.FirstOrDefault();
+
+			return View(siteOwner);
         }
 
         // GET: Posts

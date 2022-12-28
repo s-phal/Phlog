@@ -41,26 +41,41 @@ namespace Phlog.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePost(Post post, Tag tag)
         {
+            // assign value 'unkown' if model name was not provided
             if (post.ModelName == null) post.ModelName = "unknown";
 
+            // assign value 'unknown' if instagram name was not provided
             if (post.InstagramUsername == null) post.InstagramUsername = "unknown";
 
-            if (post.CategoryId == 0)
+            // reject file if not valid
+            if (!post.ImageFile.ContentType.Contains("image"))
             {
-                TempData["DisplayMessage"] = "Error - Please choose a category.";
+                TempData["DisplayMessage"] = "Error - File type not accepted.";
                 return Redirect("~/admin/post");
             }
 
+            // assign a unique file name for the property
             post.ImageFileName = _imageService.CreateUniqueFileName(post.ImageFile);
+
+            // upload the attached imagefile to the server
             _imageService.UploadImageFile(post.ImageFile, post.ImageFileName);
-            _context.Add(post);
-            await _context.SaveChangesAsync();
 
             
+
+            // track and save changes to the database
+            _context.Add(post);
+            await _context.SaveChangesAsync();
+            
+            // add tag values
             if (tag.Name != null)
             {
+                // split the string of tag values into singles 
+                // and assign them to an array
                 var tagValues = _tagService.SplitTags(tag.Name);
 
+                // create a new instance for each tag
+                // track each instance
+                // save changes to the database
                 foreach (var aTag in tagValues)
                 {
                     Tag newTag = new Tag()
@@ -70,9 +85,9 @@ namespace Phlog.Controllers
                     };
                     _context.Add(newTag);
                 }
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
 
             TempData["DisplayMessage"] = "Post created.";
             return Redirect("~/admin");
@@ -315,10 +330,10 @@ namespace Phlog.Controllers
                 return Redirect("~/admin/ownerprofile");
             }
 
-            // check file integrity 
+            // reject file if not valid
             if (!siteOwner.AvatarImageFile.ContentType.Contains("image"))
             {
-                TempData["DisplayMessage"] = "Error - Picture file type not accepted.";
+                TempData["DisplayMessage"] = "Error - File type not accepted.";
                 return Redirect("~/admin/ownerprofile");
             }
 

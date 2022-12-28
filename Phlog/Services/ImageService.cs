@@ -1,4 +1,6 @@
-﻿namespace Phlog.Services
+﻿using System.Drawing;
+
+namespace Phlog.Services
 {
     public class ImageService
     {
@@ -27,6 +29,11 @@
             Stream fileStream = new FileStream(filePath, FileMode.Create);
             await ImageFile.CopyToAsync(fileStream);
             fileStream.Close();
+        }
+
+        public Image ResizeImage(IFormFile imgToResize, Size size)
+        {
+            return (new Bitmap((Image)imgToResize, size));
         }
 
     }

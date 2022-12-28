@@ -1,10 +1,16 @@
-﻿@using Microsoft.EntityFrameworkCore;
+﻿@using Microsoft.AspNetCore.Http.Extensions;
+@using Microsoft.EntityFrameworkCore;
 @using Phlog.Data;
 @model IEnumerable<Phlog.Models.Post>
 @inject ApplicationDbContext _context;
 
 @{
+    // get all rows from category table
     var categoryList = await _context.Category.ToListAsync();
+
+    // get the URL of the current page
+    string getUrl = Context.Request.GetDisplayUrl().ToLower();
+
 }
 
 <!-- Main Start -->
@@ -20,6 +26,9 @@
             
             <!-- Display Message Item-->
             <partial name ="_DisplayMessage" />
+
+
+
 
                 <div class="card mb-3">
 
@@ -73,9 +82,9 @@
                                             <td><a href="~/admin/search?c=@post.Category.Name" class="text-decoration-none text-black">@post.Category.Name</a></td>
                                             <td><a href="~/admin/search?i=@post.InstagramUsername" class="text-decoration-none text-black">@post.InstagramUsername</a></td>
                                             <td>@foreach (var tag in tagList) 
-                                                { 
-                                                    <a href="~/admin/search?t=@tag.Name" class="text-decoration-none text-black">@(" " + tag.Name)</a> 
-                                                } 
+                                                {
+                                                <a href="~/admin/search?t=@tag.Name" class="btn btn-light text-black" style="padding-y: .15rem; padding-x: .15rem; font-size: .70rem;">@(" " + tag.Name)</a>
+                                            } 
                                             </td>
                                             <td>
                                                 <span>
@@ -114,7 +123,7 @@
                                                                 <input type="file" name="ImageFile" class="form-control mb-3" accept="image/png, image/jpg, image/jpeg" />
                                                                 <input type="text" name="ModelName" value="@post.ModelName" class="form-control mb-3" placeholder="Model Name" />
                                                                 <input type="text" name="InstagramUsername" value="@post.InstagramUsername" class="form-control mb-3" placeholder="Instagram Handle" />
-                                                                    <input type="text" name="Tag.Name" value="@foreach (var tag in tagList) { @(" " + tag.Name) } " 
+                                                                    <input type="text" name="Tag.Name" value="@foreach (var tag in tagList) { @(" " + tag.Name) }" 
                                                                     class="form-control mb-3" placeholder="Tags" />
                                                                 <select name="CategoryId" class="form-select mb-3" required>
                                                                     <option selected value="@post.Category.Id">@post.Category.Name</option>
@@ -158,19 +167,18 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
+                                    </div>
                                 }
+                            }
 
 
-                            </tbody>
-                        </table>
+                        </tbody>
+                    </table>
 
-
+                    @if (getUrl.Contains("search")) { <a href="~/admin/post" class="text-decoration-none text-secondary">Return to Index</a> }
 
                     </div>
                 </div>
-
         </div>
         <!-- Post List End -->
 

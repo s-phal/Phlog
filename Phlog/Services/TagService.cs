@@ -6,9 +6,10 @@ namespace Phlog.Services
     {
         public List<string> SplitTags(string tags)
         {
-           List<string> result = tags.Split(' ').ToList();
+            //List<string> result = tags.Split(' ').ToList();
+            List<string> result = tags.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-           return result;
+            return result;
         }
 
     }
