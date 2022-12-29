@@ -30,11 +30,5 @@ namespace Phlog.Services
             await ImageFile.CopyToAsync(fileStream);
             fileStream.Close();
         }
-
-        public Image ResizeImage(IFormFile imgToResize, Size size)
-        {
-            return (new Bitmap((Image)imgToResize, size));
-        }
-
     }
 }

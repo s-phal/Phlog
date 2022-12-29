@@ -13,29 +13,28 @@
 
 }
 
-<!-- Main Start -->
+
 <div class="container pb-3 mt-5">
     <div class="d-flex">
 
         <!-- Dashboard Panel Start -->
         <partial name="_Dashboard" />
-        <!-- Dashboard Panel End -->
 
-        <!-- Post List Start -->
+        <!-- Post List Container Start -->
         <div class="col">
             
             <!-- Display Message Item-->
             <partial name ="_DisplayMessage" />
+            
+            <!-- Post Card Start-->
+            <div class="card mb-3">
 
-
-
-
-                <div class="card mb-3">
-
-                    <!-- Card header -->
+                    <!-- Card Heaer -->
                     <div class="card-header border-bottom">
                         <h5 class="card-header-title">Posts</h5>
                     </div>
+
+                    <!-- Create Post Button & Search Field -->
                     <div class="bg-white text-white d-flex p-3">
                         <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#createModal">Create Post</button>
                         <div class="ms-auto">
@@ -53,9 +52,12 @@
 
                         </div>
                     </div>
-                    <div class="card-body text-dark">
 
+                    <!-- Post Table Start -->
+                    <div class="card-body text-dark">
                         <table class="table table-hover">
+
+                            <!-- Table Header -->
                             <thead>
                                 <tr class="text-uppercase small"> 
                                     <th scope="col">ID</th>
@@ -67,139 +69,156 @@
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @{
-                                    foreach (var post in Model)
-                                    {
-                                        var tagList = await _context.Tag
-                                        .Where(t => t.PostId == post.Id)
-                                        .ToListAsync();
 
-                                        <tr>
-                                            <td>@post.Id</td>
-                                            <td class="col-1"><img src="~/uploads/@post.ImageFileName" class="img-thumbnail" /></td>
-                                            <td><a href="~/admin/search?m=@post.ModelName" class="text-decoration-none text-black">@post.ModelName</a></td>
-                                            <td><a href="~/admin/search?c=@post.Category.Name" class="text-decoration-none text-black">@post.Category.Name</a></td>
-                                            <td><a href="~/admin/search?i=@post.InstagramUsername" class="text-decoration-none text-black">@post.InstagramUsername</a></td>
-                                            <td>@foreach (var tag in tagList) 
-                                                {
+                            <!-- Table Body -->
+                            <tbody>
+
+                            @{  // get list of posts from model
+                                foreach (var post in Model)
+                                {
+                                    // get list of tags that belongs to the post
+                                    var tagList = await _context.Tag
+                                    .Where(t => t.PostId == post.Id)
+                                    .ToListAsync();
+
+                                    <!-- Display each post in a row -->
+                                    <tr>
+                                        <td>@post.Id</td>
+                                        <td class="col-1"><img src="~/uploads/@post.ImageFileName" class="img-thumbnail" /></td>
+                                        <td><a href="~/admin/search?m=@post.ModelName" class="text-decoration-none text-black">@post.ModelName</a></td>
+                                        <td><a href="~/admin/search?c=@post.Category.Name" class="text-decoration-none text-black">@post.Category.Name</a></td>
+                                        <td><a href="~/admin/search?i=@post.InstagramUsername" class="text-decoration-none text-black">@post.InstagramUsername</a></td>
+                                        <td>
+                                            @foreach (var tag in tagList) 
+                                            {
                                                 <a href="~/admin/search?t=@tag.Name" class="btn btn-light text-black" style="padding-y: .15rem; padding-x: .15rem; font-size: .70rem;">@(" " + tag.Name)</a>
                                             } 
-                                            </td>
-                                            <td>
-                                                <span>
+                                        </td>
+                                        <td><span>
 
-                                                    <!-- Edit Button trigger modal -->
-                                                    <button class="bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#editModal-@post.Id">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square text-success me-2" viewBox="0 0 16 16">
-                                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                                        </svg>
-                                                    </button>
+                                        <!-- Edit Button trigger modal -->
+                                        <button class="bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#editModal-@post.Id">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-pencil-square text-success me-2" viewBox="0 0 16 16">
+                                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                            </svg>
+                                        </button>
 
-                                                    <!-- DELETE Button trigger modal -->
-                                                    <button class="bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#deleteModal-@post.Id">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3 text-danger" viewBox="0 0 16 16">
-                                                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
-                                                        </svg>
-                                                     </button>
+                                        <!-- DELETE Button trigger modal -->
+                                        <button class="bg-transparent border-0" data-bs-toggle="modal" data-bs-target="#deleteModal-@post.Id">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-trash3 text-danger" viewBox="0 0 16 16">
+                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                                            </svg>
+                                        </button></span>
 
-                                                </span>
-                                            </td>
-                                        </tr>
+                                        </td>
+                                    </tr>
 
-                                        <!-- Edit Post Modal -->
-                                        <div class="modal" id="editModal-@post.Id" tabindex="-1" aria-hidden="true">
-                                            <div class="modal-dialog modal-sm">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit</h1>
-                                                    </div>
-                                                    <form asp-action="editpost" asp-controller="admin" enctype="multipart/form-data">
-                                                    <input type="hidden" name="Id" value="@post.Id" />
-                                                        <div class="modal-body">
-                                                            <div class="mb-3">
-                                                                <img src="~/uploads/@post.ImageFileName" class="mx-auto w-100 mb-3"/>
-                                                                <input type="file" name="ImageFile" class="form-control mb-3" accept="image/png, image/jpg, image/jpeg" />
-                                                                <input type="text" name="ModelName" value="@post.ModelName" class="form-control mb-3" placeholder="Model Name" />
-                                                                <input type="text" name="InstagramUsername" value="@post.InstagramUsername" class="form-control mb-3" placeholder="Instagram Handle" />
-                                                                    <input type="text" name="Tag.Name" value="@foreach (var tag in tagList) { @(" " + tag.Name) }" 
-                                                                    class="form-control mb-3" placeholder="Tags" />
-                                                                <select name="CategoryId" class="form-select mb-3" required>
-                                                                    <option selected value="@post.Category.Id">@post.Category.Name</option>
-                                                                    @{
-                                                                        foreach (var category in categoryList)
-                                                                        {
-                                                                            <option value="@category.Id">@category.Name</option>
-                                                                        }
+                                    <!-- Edit Post Modal -->
+                                    <div class="modal" id="editModal-@post.Id" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit</h1>
+                                                </div>
+                                                <form asp-action="editpost" asp-controller="admin" enctype="multipart/form-data">
+                                                <input type="hidden" name="Id" value="@post.Id" />
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <img src="~/uploads/@post.ImageFileName" class="mx-auto w-100 mb-3"/>
+                                                            <input type="file" name="ImageFile" class="form-control mb-3" accept="image/png, image/jpg, image/jpeg" />
+                                                            <input type="text" name="ModelName" value="@post.ModelName" class="form-control mb-3" placeholder="Model Name" />
+                                                            <input type="text" name="InstagramUsername" value="@post.InstagramUsername" class="form-control mb-3" placeholder="Instagram Handle" />
+                                                                <input type="text" name="Tag.Name" value="@foreach (var tag in tagList) { @(" " + tag.Name) }" 
+                                                                class="form-control mb-3" placeholder="Tags" />
+                                                            <select name="CategoryId" class="form-select mb-3" required>
+                                                                <option selected value="@post.Category.Id">@post.Category.Name</option>
+                                                                @{
+                                                                    foreach (var category in categoryList)
+                                                                    {
+                                                                        <option value="@category.Id">@category.Name</option>
                                                                     }
+                                                                }
 
-                                                                </select>
-                                                            </div>
+                                                            </select>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-info text-white">Update</button>
-                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-info text-white">Update</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Delete Post Modal -->
+                                    <div class="modal fade" id="deleteModal-@post.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">@post.Id - Delete post?</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete this post?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
+                                                    <form asp-action="deletepost" asp-controller="admin">
+                                                        <input type="hidden" name="Id" value="@post.Id" />
+                                                        <button type="submit" class="btn btn-danger">Delete</button>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!-- Delete Post Modal -->
-                                        <div class="modal fade" id="deleteModal-@post.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-sm">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">@post.Id - Delete post?</h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Are you sure you want to delete this post?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-                                                        <form asp-action="Delete" asp-controller="posts">
-                                                            <input type="hidden" name="Id" value="@post.Id" />
-                                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    </div>
+                                </div>
                                 }
                             }
 
+                            </tbody>
 
-                        </tbody>
-                    </table>
-
+                        </table>
+                    
+                    <!-- Return to Index: only visible on search page -->
                     @if (getUrl.Contains("search")) { <a href="~/admin/post" class="text-decoration-none text-secondary">Return to Index</a> }
 
                     </div>
-                </div>
+
+            </div>
+            <!-- Post Card End -->
+
         </div>
-        <!-- Post List End -->
+        <!-- Post List Container End -->
 
     </div>
 </div>
-<!-- Main End --->
+
 
 <!-- Create Post Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-dialog-centered">
     <div class="modal-content">
+
+      <!-- Header Item -->
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Create a new post</h1>
       </div>
+
+        <!-- Create Post Inputs -->
         <form asp-action="createpost" asp-controller="admin" enctype="multipart/form-data">
           <div class="modal-body">
+
+              <!-- Input Items -->
               <div class="mb-3">
+              
                 <input type="file" name="ImageFile" class="form-control mb-3" accept="image/png, image/jpg, image/jpeg" required/>
                 <input type="text" name="ModelName" class="form-control mb-3" placeholder="Model Name" />
                 <input type="text" name="InstagramUsername" class="form-control mb-3" placeholder="Instagram Handle" />
                 <input type="text" name="Tag.Name" class="form-control mb-3" placeholder="Tags" />
+
+                <!-- Category List -->
                 <select name="CategoryId" class="form-select mb-3" required>
                     <option selected disabled value="">Choose a category</option>
                     @{
@@ -210,13 +229,19 @@
                     }
 
                 </select>
+
               </div>
+
           </div>
-              <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-info text-white">Create Post</button>
-              </div>
+
+            <!-- Foot Item -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-info text-white">Create Post</button>
+            </div>
+
         </form>
+
     </div>
   </div>
 </div>

@@ -35,38 +35,42 @@ namespace Phlog.Controllers
         {
 			var siteOwner = _userManager.Users.FirstOrDefault();
 
+            // redirect if no user has been registered
+            // this is needed to fix null errors
+            if (siteOwner == null)
+            {
+                return Redirect("~/Identity/Account/Register");
+            }
+
 			return View(siteOwner);
         }
 
         // GET: Posts
-        public async Task<IActionResult> Index(string? s, string? cat, string? modelname, string? tag)
+        public async Task<IActionResult> Index(string? s, string? c, string? m, string? tag)
         {
-            if(cat == "cosplay")
+            // replace variables for easier reading
+            string categoryName = c;
+            string modelName = m;
+
+            // if (c == "searchTerm") will give technical debt
+            // resolve with (categoryName == categoryName)
+            if (categoryName != null && categoryName == categoryName)
             {
                 var post = await _context.Post
-                    //.Where(p => p.Category == cat)
+                    .Where(p => p.Category.Name.ToLower() == categoryName)
                     .ToListAsync();
 
                 return View(post);
-            }
-            if (cat == "portrait")
+            }            
+            if (modelName != null && modelName == modelName)
             {
                 var post = await _context.Post
-                    //.Where(p => p.Category == cat)
-                    .ToListAsync();
-
-                return View(post);
-            }
-            
-            if(modelname != null)
-            {
-                var post = await _context.Post
-                    .Where(p => p.ModelName.ToLower() == modelname.ToLower())
-                    .ToListAsync();
-                
+                    .Where(p => p.ModelName.ToLower() == modelName)
+                    .ToListAsync();                
                 
                return View(post);
             }
+
 
             if(tag != null)
             {
@@ -82,151 +86,6 @@ namespace Phlog.Controllers
 
         }
 
-        // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Post == null)
-            {
-                return NotFound();
-            }
-
-            var post = await _context.Post
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-
-            return View(post);
-        }
-
-
-
-
-        // POST: Posts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("posts/create")]
-        public async Task<IActionResult> Create([Bind("Id,Category,ImageFile,ModelName,InstagramUsername")] Post post, Tag tag)
-        {
-            if (ModelState.IsValid)
-            {                
-                post.ImageFileName = _imageService.CreateUniqueFileName(post.ImageFile);
-                _imageService.UploadImageFile(post.ImageFile, post.ImageFileName);
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-
-                var tagValues = _tagService.SplitTags(tag.Name);
-
-                foreach (var aTag in tagValues)
-                {
-                    Tag newTag = new Tag()
-                    {
-                        Name = aTag,
-                        PostId = post.Id
-                    };
-                    _context.Add(newTag);
-
-                }
-
-                await _context.SaveChangesAsync();
-                return Redirect("~/admin");
-            }
-
-            return View(post);
-        }
-
-        // GET: Posts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Post == null)
-            {
-                return NotFound();
-            }
-
-            var post = await _context.Post.FindAsync(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            return View(post);
-        }
-
-        // POST: Posts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,Category,CreatedDate")] Post post)
-        {
-            if (id != post.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(post);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PostExists(post.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(post);
-        }
-
-        // GET: Posts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Post == null)
-            {
-                return NotFound();
-            }
-
-            var post = await _context.Post
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-
-            return View(post);
-        }
-
-        // POST: Posts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Post == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Post'  is null.");
-            }
-            var post = await _context.Post.FindAsync(id);
-            if (post != null)
-            {
-                _context.Post.Remove(post);
-            }
-            
-            await _context.SaveChangesAsync();
-
-            TempData["DisplayMessage"] = "Post deleted.";
-            return Redirect("~/admin");
-        }
 
         private bool PostExists(int id)
         {

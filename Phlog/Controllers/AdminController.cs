@@ -151,8 +151,27 @@ namespace Phlog.Controllers
 
         }
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> DeletePost(int id)
+		{
+			if (_context.Post == null)
+			{
+				return Problem("Entity set 'ApplicationDbContext.Post'  is null.");
+			}
+			var post = await _context.Post.FindAsync(id);
+			if (post != null)
+			{
+				_context.Post.Remove(post);
+			}
 
-        [Route("~/admin/search/{wildcard?}")]
+			await _context.SaveChangesAsync();
+
+			TempData["DisplayMessage"] = "Post deleted.";
+			return Redirect("~/admin");
+		}
+
+		[Route("~/admin/search/{wildcard?}")]
         public async Task<IActionResult> Search(string? s, string? m, string? c, string? i, string? t)
         {
             // assign variables for easier reading
@@ -351,7 +370,28 @@ namespace Phlog.Controllers
         [Route("~/admin/settings")]
         public async Task<IActionResult> SiteSettings()
         {
+            var rowExist = _context.SiteSettings.Any();
+
+            // create a new instance of SiteSettings
+            // if none exist.
+            // This is needed to bypass null errors
+            // during website creation.
+            
+            if (!rowExist)
+            {
+                SiteSettings onCreate = new SiteSettings()
+                {
+                    SiteName = "Site Name",
+                    SiteDescription = "Site Description"
+                };
+
+                _context.Add(onCreate);
+                _context.SaveChanges();
+            }
+
+
             var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
+
             return View("settings", siteSettings);
         }
 

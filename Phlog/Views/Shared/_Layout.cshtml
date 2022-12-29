@@ -4,12 +4,15 @@
 @inject ApplicationDbContext _context;
 
 @{
+    // get values from SiteSettings table
     var siteSettings = await _context.SiteSettings.FirstOrDefaultAsync();
 
     // get the URL of the current page
     string getUrl = Context.Request.GetDisplayUrl().ToLower();
 
+    // strings to be used for if logic
     string body = "<body>";
+    string bodyEnd = "</body>";
     string bodyWhite = "<body style='background-color: white'>";
 
 }
@@ -20,8 +23,11 @@
 <head>
 
     <!-- Site Settings -->
-    <title>@siteSettings.SiteName</title>
-    <meta name="description" content="@siteSettings.SiteDescription">
+    @if (siteSettings != null)
+    {
+        <title>@siteSettings.SiteName</title>        
+        <meta name="description" content="@siteSettings.SiteDescription">
+    }
 
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,7 +40,9 @@
 </head>
 
 @{
-    if (getUrl.Contains("account/manage"))
+    // account pages doesn't work well with dark background color
+    // this logic replaces background to white color
+    if (getUrl.Contains("account/manage") || getUrl.Contains("registerconfirmation") || getUrl.Contains("account/confirmemail"))
     {
         @Html.Raw(bodyWhite);
     }
@@ -47,8 +55,9 @@
 
 @RenderBody()
 
-
-    @if (!getUrl.Contains("identity/account"))
+@{
+    //  show footer only on non account pages
+    if (!getUrl.Contains("identity/account"))
     {
         <footer class="text-secondary opacity-50">
                 <div class="container">
@@ -57,16 +66,50 @@
          </footer> 
     }
 
+}
 
 
-
+    <!-- Script Items -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/masonry.pkgd.min.js"></script>
 
 
+
+    <!-- Back to Top Code -->
+    <script type="text/javascript">
+
+        //Get the button
+        let mybutton = document.getElementById("btn-back-to-top");
+
+        // When the user scrolls down 60px from the top of the document, show the button
+        window.onscroll = function () {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (
+                document.body.scrollTop > 1000 ||
+                document.documentElement.scrollTop > 1000
+            ) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+        // When the user clicks on the button, scroll to the top of the document
+        mybutton.addEventListener("click", backToTop);
+
+        function backToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+</script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 
-</@body>
+@Html.Raw(bodyEnd)
 </html>

@@ -1,17 +1,25 @@
-﻿@using Microsoft.EntityFrameworkCore;
+﻿@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore;
 @using Phlog.Data
 @inject ApplicationDbContext _context;
+@inject SignInManager<SiteOwner> _signInManager;
 @{
     var categoryList = await _context.Category.ToListAsync();
 }
 <div class="text-center mb-4 nav-menu opacity-75">
-    <a href="/" class="text-decoration-none text-uppercase text-white me-2">all</a>
+        @if (_signInManager.IsSignedIn(User))
+        {
+            <a href="~/admin" class="text-decoration-none text-uppercase text-white me-2">Dashboard</a>
+        
+        }
+    <a href="/" class="text-decoration-none text-uppercase text-white me-2">view all</a>
     @{
         foreach (var category in categoryList)
         {
-            <a href="~/?cat=@category.Name" class="text-decoration-none text-uppercase text-white me-2">@category.Name</a>
+            <a href="~/?c=@category.Name.ToLower()" class="text-decoration-none text-uppercase text-white me-2">@category.Name</a>
         }
     }
 
-    <a href="~/contactme" class="text-decoration-none text-uppercase text-white">contact</a>
+    <a href="~/contactme" class="text-decoration-none text-uppercase text-white">about me</a>
+
 </div>

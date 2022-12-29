@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Phlog/wwwroot/uploads
 /Phlog/todos.cs
+/Phlog/appsettings.json

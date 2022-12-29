@@ -3,34 +3,38 @@
 
 <div class="container pb-3 mt-5">
     <div class="d-flex">
+
+        <!-- Dashboard Panel -->
         <partial name="_Dashboard" />
 
-        <div class="col">
-
             <!-- Owner Profile START -->
-            <div class="col-sm-12 col-lg-5">
+            <div class="col-lg-4">
 
-            <partial name="_DisplayMessage" />
+                <!-- Notification Banner Item -->
+                <partial name="_DisplayMessage" />
 
+                <!-- Card Item START-->
                 <div class="card shadow">
 
-                    <!-- Card header -->
+                    <!-- Card Header Item-->
                     <div class="card-header border-bottom">
                         <h5 class="card-header-title">Owner Profile</h5>
                     </div>
 
                     <!-- Card body START -->
                     <div class="card-body">
+
+                        <!-- Update Owner Profile-->
                         <form asp-action="UpdateOwnerProfile" asp-controller="Admin" enctype="multipart/form-data">
                             <div class=" row g-3 align-items-center">
 
+                                <!-- Display Image-->
                                 <img src="~/uploads/@Model.AvatarFileName" class="mx-auto " style="width: 150px; height: 150px" />
 
-                                <!-- Profile Picture -->
+                                <!-- Image Input Item -->
                                 <div class="w-100">
                                     <input type="file" name="AvatarImageFile" class="form-control" />
                                 </div>
-
 
                                 <!-- First Name -->
                                 <div class="w-50">
@@ -67,24 +71,21 @@
                                     <input type="text" name="TwitterId" value="@Model.TwitterId" class="form-control" placeholder="Twitter">
                                 </div>
 
-
                                 <!-- Save button -->
                                 <div class="d-sm-flex justify-content-end">
                                     <button type="submit" class="btn btn-info mb-0 text-white">Update</button>
                                 </div>
                             </div>
                         </form>
+
                     </div>
                     <!-- Card body END -->
 
                 </div>
+                <!-- Card Item End -->
+
             </div>
             <!-- Photographer Profile END -->
-
-
-
-        </div>
-
 
     </div>
 </div>
