@@ -23,7 +23,7 @@ Front Page
 ![front](https://user-images.githubusercontent.com/111925825/210410676-97476625-4c4d-4422-bc19-5504f04aa112.jpg)
 
 # Installation
-This project was developed and customized specifically for my needs but maybe others may find it useful.
+This project was developed and customized specifically for my needs but others may find it useful.
 - Have PostgreSQL installed
 - Change the connection string in the appsettings.json file
 - Apply Migration during first page load
