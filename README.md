@@ -22,4 +22,13 @@ Dashboard
 Front Page
 ![front](https://user-images.githubusercontent.com/111925825/210410676-97476625-4c4d-4422-bc19-5504f04aa112.jpg)
 
+# Installation
+This project was developed and customized specifically for my needs but maybe others may find it useful.
+- Have PostgreSQL installed
+- Change the connection string in the appsettings.json file
+- Apply Migration during first page load
+- Done
+
+# Known Issues
+Images on the grid layout may appear overlapped. This is a [bug with the Mason library](https://github.com/desandro/masonry/issues/1147)
 
