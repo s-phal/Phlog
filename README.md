@@ -10,7 +10,7 @@ Project was developed using:
 
 
 Hosting Environment:
-- Debian 11
+- Debian Linux 11
 - Apache Web Server that proxies to the Kestrel Server
 - [My Photography Site](http://www.samphal.com)
 - You can demo the app with the provided credentials [here](http://phlogdemo.samphal.com/admin)
